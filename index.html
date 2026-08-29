@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#00f5ff">
+  <meta name="description" content="Aether Studio - Next-Generation Visual Animation & Particle Engine">
+  <title>Aether Studio — Visual Animation Engine</title>
+  
+  <link rel="manifest" href="manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+  <!-- CRT Glow & Scanline Overlay -->
+  <div class="scanlines" aria-hidden="true"></div>
+  <div class="ambient-glow" aria-hidden="true"></div>
+
+  <!-- Main Canvas Container -->
+  <main class="canvas-container">
+    <canvas id="stage"></canvas>
+  </main>
+
+  <!-- Top Navigation & Header -->
+  <header class="app-header">
+    <div class="brand">
+      <div class="brand-logo">
+        <svg viewBox="0 0 32 32" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="16" cy="16" r="13" stroke="var(--color-accent)" stroke-dasharray="60 20" />
+          <polygon points="16,6 24,22 8,22" fill="none" stroke="var(--color-accent)" />
+          <circle cx="16" cy="16" r="3" fill="var(--color-accent)" />
+        </svg>
+      </div>
+      <h1 class="brand-title">AETHER<span>STUDIO</span></h1>
+    </div>
+
+    <!-- Multi-page Hash Nav -->
+    <nav class="scene-nav">
+      <a href="#particles" class="nav-btn active" data-scene="particles">
+        <span class="nav-icon">✦</span> Particles
+      </a>
+      <a href="#cybergrid" class="nav-btn" data-scene="cybergrid">
+        <span class="nav-icon">⬡</span> Cyber Grid
+      </a>
+      <a href="#attractor" class="nav-btn" data-scene="attractor">
+        <span class="nav-icon">⚛</span> Attractor
+      </a>
+      <a href="#vortex" class="nav-btn" data-scene="vortex">
+        <span class="nav-icon">🌀</span> Vortex
+      </a>
+    </nav>
+
+    <!-- Top Right Stats -->
+    <div class="header-actions">
+      <div class="stats-badge" id="statsDisplay">
+        <span class="stat-item"><strong id="fpsVal">60</strong> FPS</span>
+        <span class="stat-divider">|</span>
+        <span class="stat-item"><strong id="msVal">16.6</strong> ms</span>
+        <span class="stat-divider">|</span>
+        <span class="stat-item"><strong id="countVal">0</strong> Pts</span>
+      </div>
+      <button class="icon-btn" id="btnAudio" aria-label="Toggle Audio Reactivity" title="Audio Reactivity Toggle">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 4v16M8 8v8M16 8v8M4 11v2M20 11v2" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <button class="icon-btn" id="btnSnapshot" aria-label="Take Canvas Snapshot" title="Export High-Res PNG">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+          <circle cx="12" cy="13" r="4"/>
+        </svg>
+      </button>
+      <button class="icon-btn" id="btnToggleUI" aria-label="Toggle HUD Drawer" title="Toggle Sidebar (H)">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+          <line x1="9" y1="3" x2="9" y2="21"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Control HUD Panel (Drawer) -->
+  <aside class="control-panel" id="controlPanel">
+    <div class="panel-header">
+      <h2>ENGINE CONTROLS</h2>
+      <span class="scene-badge" id="currentSceneBadge">PARTICLE FIELD</span>
+    </div>
+
+    <div class="panel-section">
+      <label class="section-label">THEME PRESETS</label>
+      <div class="preset-grid">
+        <button class="preset-btn active" data-preset="cyan">Cyber Cyan</button>
+        <button class="preset-btn" data-preset="gold">Solar Flare</button>
+        <button class="preset-btn" data-preset="emerald">Matrix</button>
+        <button class="preset-btn" data-preset="violet">Neon Synth</button>
+      </div>
+    </div>
+
+    <!-- Dynamic Scene Sliders Container -->
+    <div class="panel-section" id="dynamicControls">
+      <!-- Injected by Active Scene Controller -->
+    </div>
+
+    <div class="panel-section">
+      <label class="section-label">GLOBAL ENGINE OPTION</label>
+      <div class="control-group">
+        <div class="toggle-row">
+          <span>Bloom Glow Pass</span>
+          <label class="switch">
+            <input type="checkbox" id="chkBloom" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="toggle-row">
+          <span>Mouse Repulsion Force</span>
+          <label class="switch">
+            <input type="checkbox" id="chkMouseForce" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="toggle-row">
+          <span>Simulated Audio Engine</span>
+          <label class="switch">
+            <input type="checkbox" id="chkSimAudio">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Audio Visualizer Spectrum Mini-Bar -->
+    <div class="audio-hud-bar" id="audioHudBar">
+      <div class="audio-label">AUDIO REACTIVITY SPECTRUM</div>
+      <div class="spectrum-bars">
+        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Interactive Canvas Overlay / Instructions Prompt -->
+  <div class="interaction-hint" id="hintBox">
+    <span>CLICK & DRAG TO INTERACT WITH FIELD</span>
+  </div>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
